@@ -1,21 +1,20 @@
 import React, { useState } from "react";
 import Board from "./component/Board";
 import { calculateWinner } from "./winner";
+import StatusMessage from "./component/StatusMessage";
 import "./style.scss";
 
 function App() {
+
+
   const [squares, setSquares] = useState(Array(9).fill(null));
   const [isNext, setIsNext] = useState(false);
 
   const winnerInfo = calculateWinner(squares);
-  const nextPlayer = isNext ? "X" : "O";
-
-  const statusMessage = winnerInfo.winner
-    ? `Winner is ${winnerInfo.winner}`
-    : `Next player: ${nextPlayer}`;
+  const { winner } = winnerInfo; // Destructure the winner property
 
   const handleSquareClick = (clickedPosition) => {
-    if (winnerInfo.winner || squares[clickedPosition]) {
+    if (winner || squares[clickedPosition]) {
       return; // Return early if there's a winner or the square is already filled.
     }
     setSquares((currentSquares) => {
@@ -28,11 +27,15 @@ function App() {
     });
     setIsNext((currentIsNext) => !currentIsNext);
   };
-
+const onNewGameStart = () =>{
+setSquares(Array(9).fill(null));
+};
   return (
     <div className="app">
-      <h2>{statusMessage}</h2>
+      <StatusMessage winnerInfo={winnerInfo} isNext={isNext} squares={squares} />
       <Board squares={squares} handleSquareClick={handleSquareClick} />
+
+      <button type = "button" onClick={onNewGameStart} className={`btn-reset ${winner ? 'active' :" "}`}>Start New Game</button>
     </div>
   );
 }
