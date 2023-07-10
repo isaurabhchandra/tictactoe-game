@@ -46,6 +46,7 @@ function App() {
       >
         Start New Game
       </button>
+      <div className="bg-balls" />
     </div>
   );
 }
